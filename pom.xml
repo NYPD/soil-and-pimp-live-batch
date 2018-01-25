@@ -1,0 +1,125 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>live.soilandpimp</groupId>
+  <artifactId>soil-and-pimp-live-batch</artifactId>
+  <name>Soil and Pimp Live Batch</name>
+  <version>0.1.0</version>
+  <packaging>jar</packaging>
+  <inceptionYear>2018</inceptionYear>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/NYPD/soil-and-pimp-live-batch/issues</url>
+  </issueManagement>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>nypd</id>
+      <name>NYPD</name>
+      <email>nypd54@outlook.com</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <properties>
+    <spring.version>5.0.3.RELEASE</spring.version>
+    <spring.batch.version>4.0.0.RELEASE</spring.batch.version>
+  </properties>
+
+
+  <dependencies>
+
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>${spring.batch.version}</version>
+    </dependency>
+
+    <!-- JUnit Tests -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.0.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>2.13.0</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>junit</testSourceDirectory>
+
+    <finalName>${project.artifactId}</finalName>
+
+    <resources>
+      <resource>
+        <targetPath>resource</targetPath>
+        <directory>src/resource</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <testResources>
+      <testResource>
+        <directory>junit/configuration</directory>
+      </testResource>
+      <testResource>
+        <targetPath>setup</targetPath>
+        <directory>junit/setup</directory>
+      </testResource>
+      <testResource>
+        <targetPath>resource/mybatis/mapper</targetPath>
+        <directory>src/resource/mybatis/mapper</directory>
+      </testResource>
+      <testResource>
+        <targetPath>resource/api/google</targetPath>
+        <directory>src/resource/api/google</directory>
+      </testResource>
+    </testResources>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <compilerArgs>
+            <compilerArg>-parameters</compilerArg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+
+    </plugins>
+
+  </build>
+
+</project>
