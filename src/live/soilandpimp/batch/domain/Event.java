@@ -1,25 +1,25 @@
 package live.soilandpimp.batch.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
 
-    private String titleForSns;
-    @JsonAlias(value = {"live-event_nm"})
+    @JsonProperty(value = "title_for_sns")
+    private String title;
+    @JsonProperty(value = "live-event_nm")
     private String eventName;
 
     public String getEventName() {
         return eventName;
     }
 
-
-    public String getTitleForSns() {
-        return titleForSns;
+    public String getTitle() {
+        return title;
     }
 
     @Override
     public String toString() {
-        return "Event [titleForSns=" + titleForSns + ", eventName=" + eventName + "]";
+        return "Event [title=" + title + ", eventName=" + eventName + "]";
     }
 
 }
