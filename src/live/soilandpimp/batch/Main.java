@@ -24,8 +24,6 @@ import live.soilandpimp.batch.domain.Event;
 public class Main {
 
     public static void main(String[] args) throws IOException, JSONException {
-        // Document doc = Jsoup.connect("http://www.jvcmusic.co.jp/soilpimp/live.html").get();
-        // System.out.println(doc);
 
         String url = "http://www.jvcmusic.co.jp/-/Information/A018653.json";
 
