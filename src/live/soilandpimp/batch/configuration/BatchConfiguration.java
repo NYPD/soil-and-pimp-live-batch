@@ -1,8 +1,11 @@
 package live.soilandpimp.batch.configuration;
 
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
-import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,22 +18,47 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import live.soilandpimp.batch.dao.DAO;
+import live.soilandpimp.batch.dao.JvcMusicJsonDao;
+import live.soilandpimp.batch.domain.Event;
+import live.soilandpimp.batch.reader.SiteEventReader;
 import live.soilandpimp.batch.service.Service;
+import live.soilandpimp.batch.writer.EventWriter;
 
 @Configuration
-@EnableBatchProcessing(modular = true)
+@EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
 @Import(value = {DataSourceConfiguration.class})
 public class BatchConfiguration {
 
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    private JvcMusicJsonDao jvcMusicJsonDao;
+
     @Bean
-    public ApplicationContextFactory siteScraperContext() {
-        return new GenericApplicationContextFactory(SiteEventConfiguration.class);
+    public Job addNewEventsJob() {
+        return this.jobBuilderFactory.get("addNewEvents")
+                                     .start(addNewEvents())
+                                     .next(emailNewEvents())
+                                     .build();
     }
 
     @Bean
-    public ApplicationContextFactory emailContext() {
-        return new GenericApplicationContextFactory(EmailConfiguration.class);
+    public Step addNewEvents() {
+        return this.stepBuilderFactory.get("addNewEvents")
+                                      .<Event, Event>chunk(1)
+                                      .reader(new SiteEventReader(jvcMusicJsonDao))
+                                      .writer(new EventWriter())
+                                      .build();
+    }
+
+    @Bean
+    public Step emailNewEvents() {
+        return null;
     }
 
     @Bean
@@ -43,6 +71,5 @@ public class BatchConfiguration {
 
         return objectMapper;
     }
-
 
 }
