@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import live.soilandpimp.batch.dao.JVCMusicJsonDao;
 import live.soilandpimp.batch.domain.Event;
 import live.soilandpimp.batch.reader.SiteEventReader;
 import live.soilandpimp.batch.writer.EventWriter;
 
 @Configuration
-public class SiteScraperConfiguration {
+public class SiteEventConfiguration {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -21,9 +22,12 @@ public class SiteScraperConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    private JVCMusicJsonDao jvcMusicJsonDao;
+
     @Bean
-    public Job siteScaperJob() {
-        return this.jobBuilderFactory.get("siteScaperJob").start(readSite())
+    public Job addNewEventsJob() {
+        return this.jobBuilderFactory.get("addNewEvents").start(readSite())
                 .next(getPreviousEvents())
                 .next(checkForNewEvents())
                 .build();
@@ -31,11 +35,10 @@ public class SiteScraperConfiguration {
 
     @Bean
     public Step readSite() {
-
         return this.stepBuilderFactory.get("readSite").<Event, Event>chunk(1)
-                                                      .reader(new SiteEventReader())
-                                                      .writer(new EventWriter())
-                                                      .build();
+                .reader(new SiteEventReader(jvcMusicJsonDao))
+                .writer(new EventWriter())
+                .build();
     }
 
     @Bean

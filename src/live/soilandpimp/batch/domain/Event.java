@@ -1,25 +1,60 @@
 package live.soilandpimp.batch.domain;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Soil and Pimp Event
+ * 
+ * @author NYPD
+ *
+ */
 public class Event {
 
-    @JsonProperty(value = "title_for_sns")
-    private String title;
     @JsonProperty(value = "live-event_nm")
-    private String eventName;
+    private String name;
+    @JsonProperty(value = "title_for_sns")
+    private String socialNetworkingTitle;
 
-    public String getEventName() {
-        return eventName;
+    private String memo;
+
+    @JsonProperty(value = "link_url")
+    private String eventUrl;
+    @JsonProperty(value = "url")
+    private String jvcUrl;
+
+    @JsonProperty(value = "open_dt")
+    private String openDate;
+
+    List<Schedule> schedules;
+
+    // Default Accessors *********************************************
+    public String getName() {
+        return name;
+    }
+    public String getSocialNetworkingTitle() {
+        return socialNetworkingTitle;
+    }
+    public String getMemo() {
+        return memo;
+    }
+    public String getEventUrl() {
+        return eventUrl;
+    }
+    public String getJvcUrl() {
+        return jvcUrl;
+    }
+    public String getOpenDate() {
+        return openDate;
+    }
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public String getTitle() {
-        return title;
-    }
 
     @Override
     public String toString() {
-        return "Event [title=" + title + ", eventName=" + eventName + "]";
+        return "Event [name=" + name + ", schedules=" + schedules + "]";
     }
-
 }
