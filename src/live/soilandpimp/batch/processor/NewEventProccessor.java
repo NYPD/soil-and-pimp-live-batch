@@ -1,10 +1,12 @@
 package live.soilandpimp.batch.processor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.batch.item.ItemProcessor;
 
 import live.soilandpimp.batch.domain.Event;
+import live.soilandpimp.batch.repositories.EventRepository;
 
 /**
  * Processor checking to see if the {@link Event} passed in already exists in cassandra or not. <br>
@@ -16,10 +18,14 @@ import live.soilandpimp.batch.domain.Event;
  */
 public class NewEventProccessor implements ItemProcessor<Event, Event> {
 
-    private Map<String, Event> pastEventsByKey;
+    private Map<String, Event> pastEventsByKey = new HashMap<>();
 
-    public NewEventProccessor() {
+    public NewEventProccessor(EventRepository eventRepository) {
 
+        Iterable<Event> findAll = eventRepository.findAll();
+
+        for (Event event : findAll)
+            pastEventsByKey.put(event.getEventKey(), event);
     }
 
     @Override

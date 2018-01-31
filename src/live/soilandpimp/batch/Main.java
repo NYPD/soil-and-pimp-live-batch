@@ -10,6 +10,7 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.boot.SpringApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -24,6 +25,11 @@ import live.soilandpimp.batch.domain.Event;
 public class Main {
 
     public static void main(String[] args) throws IOException, JSONException {
+
+        SpringApplication springApplication = new SpringApplication(Main.class);
+        springApplication.setAdditionalProfiles("DEV");
+
+        springApplication.run(args);
 
         String url = "http://www.jvcmusic.co.jp/-/Information/A018653.json";
 

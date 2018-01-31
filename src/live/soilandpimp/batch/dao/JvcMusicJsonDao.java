@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import live.soilandpimp.batch.domain.Event;
+import live.soilandpimp.batch.exception.JvcSiteUnavailible;
 
 @Repository
 public class JvcMusicJsonDao {
@@ -35,9 +36,7 @@ public class JvcMusicJsonDao {
 
             int responseCode = connection.getResponseCode();
 
-            if (responseCode != 200) {
-                throw new RuntimeException();// TODO enhance
-            }
+            if (responseCode != 200) throw new JvcSiteUnavailible(responseCode);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
@@ -58,7 +57,7 @@ public class JvcMusicJsonDao {
 
             return objectMapper.readValue(jsonArray.toString(), new TypeReference<List<Event>>() {});
 
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException | JvcSiteUnavailible e) {
             e.printStackTrace();
             throw new RuntimeException();// TODO enhance
         }

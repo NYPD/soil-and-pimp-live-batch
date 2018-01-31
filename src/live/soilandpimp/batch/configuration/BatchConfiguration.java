@@ -20,14 +20,17 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import live.soilandpimp.batch.dao.DAO;
 import live.soilandpimp.batch.dao.JvcMusicJsonDao;
 import live.soilandpimp.batch.domain.Event;
+import live.soilandpimp.batch.processor.NewEventProccessor;
 import live.soilandpimp.batch.reader.SiteEventReader;
+import live.soilandpimp.batch.repositories.EmailRepository;
+import live.soilandpimp.batch.repositories.EventRepository;
 import live.soilandpimp.batch.service.Service;
 import live.soilandpimp.batch.writer.EventWriter;
 
 @Configuration
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
-@Import(value = {DataSourceConfiguration.class})
+@Import(value = {CassandraConfiguration.class})
 public class BatchConfiguration {
 
     @Autowired
@@ -38,6 +41,12 @@ public class BatchConfiguration {
 
     @Autowired
     private JvcMusicJsonDao jvcMusicJsonDao;
+
+    @Autowired
+    private EventRepository eventRepository;
+    
+    @Autowired
+    private EmailRepository emailRepository;
 
     @Bean
     public Job addNewEventsJob() {
@@ -50,8 +59,9 @@ public class BatchConfiguration {
     @Bean
     public Step addNewEvents() {
         return this.stepBuilderFactory.get("addNewEvents")
-                                      .<Event, Event>chunk(1)
+                                      .<Event, Event>chunk(5)
                                       .reader(new SiteEventReader(jvcMusicJsonDao))
+                                      .processor(new NewEventProccessor(eventRepository))
                                       .writer(new EventWriter())
                                       .build();
     }

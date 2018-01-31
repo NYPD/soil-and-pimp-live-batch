@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.data.cassandra.core.mapping.Table;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -14,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author NYPD
  *
  */
+@Table
 public class Event {
 
     private String eventKey;
 
-    @JsonProperty(value = "live-event_nm")
     private String name;
     @JsonProperty(value = "title_for_sns")
     private String socialNetworkingTitle;
@@ -27,7 +29,7 @@ public class Event {
 
     @JsonProperty(value = "link_url")
     private String eventUrl;
-    @JsonProperty(value = "url")
+
     private String jvcUrl;
 
     @JsonProperty(value = "open_dt")
@@ -35,41 +37,42 @@ public class Event {
 
     List<Schedule> schedules;
 
-    // Modified Accessors *********************************************
     /**
-     * Uses the {@link Event}'s name and {@link Schedule} dates to construct a unique using with the
-     * help of an MD5 hashing computation. <br>
+     * Uses the {@link Event}'s name and jvcurl dates to construct a unique using with the help of
+     * an MD5 hashing computation. <br>
      * <br>
      * This should pretty much guarantee us a unique key due to the significant low volume of Soil
      * and "Pimp" Sessions events.
      * 
-     * @return A unique {@link String} key for this event
      */
-    public String getEventKey() {
+    public Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "url") String jvcUrl) {
 
-        if (this.eventKey != null) return this.eventKey;
+        this.name = name;
+        this.jvcUrl = jvcUrl;
 
-        StringBuffer stringBuffer = new StringBuffer(this.name);
-        for (Schedule schedule : schedules)
-            stringBuffer.append(schedule.getDate()).append(schedule.getPlace());
-
+        String tempCompositeKey = name + jvcUrl;
         // This exception should never happen, MD5 should always be present
         try {
 
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(stringBuffer.toString().getBytes());
+            messageDigest.update(tempCompositeKey.getBytes());
             byte[] digest = messageDigest.digest();
 
             String eventKeyHash = DatatypeConverter.printHexBinary(digest);
 
-            return eventKeyHash;
+            this.eventKey = eventKeyHash;
         } catch (NoSuchAlgorithmException e) {
             throw new AssertionError(e);
         }
 
     }
 
+    // Modified Accessors *********************************************
+
     // Default Accessors *********************************************
+    public String getEventKey() {
+        return eventKey;
+    }
     public String getName() {
         return name;
     }
@@ -88,13 +91,13 @@ public class Event {
     public String getOpenDate() {
         return openDate;
     }
-
     public List<Schedule> getSchedules() {
         return schedules;
     }
 
     @Override
     public String toString() {
-        return "Event [eventKey=" + getEventKey() + ", name=" + name + ", schedules=" + schedules + "]";
+        return "Event [eventKey=" + eventKey + ", name=" + name + ", schedules=" + schedules + "]";
     }
+
 }
