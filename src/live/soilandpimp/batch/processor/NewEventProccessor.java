@@ -32,7 +32,6 @@ public class NewEventProccessor implements ItemProcessor<Event, Event> {
     public Event process(Event event) throws Exception {
 
         boolean isNewEvent = pastEventsByKey.get(event.getEventKey()) == null;
-
         return isNewEvent? event : null;
     }
 
