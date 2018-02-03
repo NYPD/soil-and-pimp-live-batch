@@ -13,6 +13,6 @@ import live.soilandpimp.batch.domain.Event;
  */
 public interface EventRepository extends CrudRepository<Event, String> {
 
-    @Query("SELECT * from users where user_id in(?0)")
-    public Event findEventById(String id);
+    @Query("SELECT * from events where event_key in(?0)")
+    public Event findEventById(String eventKey);
 }

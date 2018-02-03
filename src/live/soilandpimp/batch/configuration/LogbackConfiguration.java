@@ -1,15 +1,23 @@
 package live.soilandpimp.batch.configuration;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.net.SMTPAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.net.SMTPAppenderBase;
 import ch.qos.logback.core.rolling.RollingFileAppender;
@@ -21,12 +29,14 @@ import live.soilandpimp.batch.util.AppConstants;
 @Configuration
 public class LogbackConfiguration {
 
-    private final String encoderPattern = "%d{[yyyy-MM-dd HH:mm:ss.SSS]} [%-5level] \\(%F{0}:%M\\(\\):%L\\) - %msg%n";
+    private final String encoderPattern = "%d{[yyyy-MM-dd HH:mm:ss.SSS]} [%-5level]\\(%F{0}:%M\\(\\):%L\\) - %msg%n";
     private final String filePattern = "/tomcat/logs/" + AppConstants.PROJECT_NAME + "/moe-logs.%d{yyyy-MM-dd}.log";
     private final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
     @Autowired
-    private Environment springEnvironment;
+    private Environment springEnviroment;
+    @Autowired
+    private List<Appender<ILoggingEvent>> appenders;
 
     @Bean
     @DevelopmentProfile
@@ -47,7 +57,7 @@ public class LogbackConfiguration {
     @ProductionProfile
     public RollingFileAppender<ILoggingEvent> rollingFileAppender() {
 
-        RollingFileAppender<ILoggingEvent> rollingFileAppender= new RollingFileAppender<>();
+        RollingFileAppender<ILoggingEvent> rollingFileAppender = new RollingFileAppender<>();
         rollingFileAppender.setName("rolling");
         rollingFileAppender.setContext(loggerContext);
 
@@ -73,15 +83,13 @@ public class LogbackConfiguration {
         SMTPAppender smtpAppender = new SMTPAppender();
         smtpAppender.setContext(loggerContext);
         smtpAppender.setName("e-mail");
-        smtpAppender.setFrom(springEnvironment.getProperty("application.logback.smtp.from"));
-        smtpAppender.addTo(springEnvironment.getProperty("application.logback.smtp.to"));
+        smtpAppender.setFrom("exceptions@soilandpimp.live");
+        smtpAppender.addTo("devs@soilandpimp.live");
         smtpAppender.setSubject(AppConstants.APPLICATION_NAME + " Exception");
-        smtpAppender.setSMTPHost(springEnvironment.getProperty("application.logback.smtp.host"));
-        smtpAppender.setSMTPPort(Integer.parseInt(springEnvironment.getProperty("application.logback.smtp.port")));
-        smtpAppender.setUsername(springEnvironment.getProperty("application.logback.smtp.username"));
-        smtpAppender.setPassword(springEnvironment.getProperty("application.logback.smtp.password"));
-        smtpAppender.setSSL(Boolean.parseBoolean(springEnvironment.getProperty("application.logback.smtp.ssl")));
-        smtpAppender.setSTARTTLS(Boolean.parseBoolean(springEnvironment.getProperty("application.logback.smtp.tls")));
+        smtpAppender.setSMTPHost("localhost");
+        smtpAppender.setSMTPPort(25);
+        smtpAppender.setSSL(false);
+        smtpAppender.setSTARTTLS(false);
 
         smtpAppender.setAsynchronousSending(false);
         smtpAppender.setLayout(getDefaultPattern().getLayout());
@@ -89,6 +97,28 @@ public class LogbackConfiguration {
         smtpAppender.start();
 
         return smtpAppender;
+
+    }
+
+    @PostConstruct
+    public void initLogbackAppenders() {
+
+        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        root.detachAndStopAllAppenders();
+
+        for (Appender<ILoggingEvent> appender : appenders)
+            root.addAppender(appender);
+
+        String[] activeProfiles = springEnviroment.getActiveProfiles();
+
+        boolean isDevelopment = Arrays.stream(activeProfiles)
+                .filter(x -> AppConstants.DEV_PROFILE.equals(x))
+                .findAny()
+                .orElse(null) != null;
+
+        Level loggingLevel = isDevelopment? Level.DEBUG : Level.INFO;
+
+        root.setLevel(loggingLevel);
 
     }
 

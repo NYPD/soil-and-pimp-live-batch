@@ -30,7 +30,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @Configuration
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
-@Import(value = {CassandraConfiguration.class})
+@Import(value = {CassandraConfiguration.class, LogbackConfiguration.class})
 public class BatchConfiguration {
 
     @Autowired
@@ -44,26 +44,26 @@ public class BatchConfiguration {
 
     @Autowired
     private EventRepository eventRepository;
-    
+
     @Autowired
     private EmailRepository emailRepository;
 
     @Bean
     public Job addNewEventsJob() {
         return this.jobBuilderFactory.get("addNewEvents")
-                                     .start(addNewEvents())
-                                     .next(emailNewEvents())
-                                     .build();
+                .start(addNewEvents())
+                // .next(emailNewEvents())
+                .build();
     }
 
     @Bean
     public Step addNewEvents() {
         return this.stepBuilderFactory.get("addNewEvents")
-                                      .<Event, Event>chunk(5)
-                                      .reader(new SiteEventReader(jvcMusicJsonDao))
-                                      .processor(new NewEventProccessor(eventRepository))
-                                      .writer(new EventWriter())
-                                      .build();
+                .<Event, Event>chunk(1)
+                .reader(new SiteEventReader(jvcMusicJsonDao))
+                .processor(new NewEventProccessor(eventRepository))
+                .writer(new EventWriter(eventRepository))
+                .build();
     }
 
     @Bean

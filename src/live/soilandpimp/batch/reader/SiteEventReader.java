@@ -13,7 +13,6 @@ import live.soilandpimp.batch.domain.Event;
 public class SiteEventReader implements ItemReader<Event> {
 
     private List<Event> events;
-    private int nextEvent = 0;
 
     public SiteEventReader(JvcMusicJsonDao jvcMusicJsonDao) {
         this.events = jvcMusicJsonDao.getCurrentSiteEvents();
@@ -22,12 +21,10 @@ public class SiteEventReader implements ItemReader<Event> {
     @Override
     public Event read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
-        // No more events to read
-        if (nextEvent >= events.size()) return null;
+        if (events == null || events.isEmpty()) return null;
 
-        Event event = events.get(nextEvent);
-        nextEvent++;
-        return event;
+        return events.remove(0);
+
     }
 
 }

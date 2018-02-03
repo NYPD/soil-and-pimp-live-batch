@@ -5,6 +5,4 @@ package live.soilandpimp.batch.domain;
  * 
  * @author NYPD
  */
-public interface Domain {
-
-}
+public interface Domain {}
