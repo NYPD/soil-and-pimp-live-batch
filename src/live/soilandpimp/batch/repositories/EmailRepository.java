@@ -3,7 +3,6 @@ package live.soilandpimp.batch.repositories;
 import org.springframework.data.repository.CrudRepository;
 
 import live.soilandpimp.batch.domain.EmailSubscription;
-import live.soilandpimp.batch.domain.Event;
 
 /**
  * Simple repository interface for {@link EmailSubscription} instances. The interface is used to
@@ -11,6 +10,6 @@ import live.soilandpimp.batch.domain.Event;
  * 
  * @author NYPD
  */
-public interface EmailRepository extends CrudRepository<Event, String> {
+public interface EmailRepository extends CrudRepository<EmailSubscription, String> {
 
 }

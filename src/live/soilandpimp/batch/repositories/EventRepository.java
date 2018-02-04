@@ -1,6 +1,7 @@
 package live.soilandpimp.batch.repositories;
 
-import org.springframework.data.cassandra.repository.Query;
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import live.soilandpimp.batch.domain.Event;
@@ -13,6 +14,5 @@ import live.soilandpimp.batch.domain.Event;
  */
 public interface EventRepository extends CrudRepository<Event, String> {
 
-    @Query("SELECT * from events where event_key in(?0)")
-    public Event findEventById(String eventKey);
+    public List<Event> findByBroadcastIsFalse();
 }

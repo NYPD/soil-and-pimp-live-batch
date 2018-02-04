@@ -67,6 +67,20 @@ public class Schedule {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((date == null)? 0 : date.hashCode());
+        result = prime * result + ((enterTime == null)? 0 : enterTime.hashCode());
+        result = prime * result + ((link == null)? 0 : link.hashCode());
+        result = prime * result + ((memo == null)? 0 : memo.hashCode());
+        result = prime * result + ((place == null)? 0 : place.hashCode());
+        result = prime * result + ((prefecture == null)? 0 : prefecture.hashCode());
+        result = prime * result + ((startTime == null)? 0 : startTime.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Schedule [startTime=" + startTime + ", prefecture=" + prefecture + ", place=" + place + "]";
     }

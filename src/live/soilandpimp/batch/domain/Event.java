@@ -2,7 +2,8 @@ package live.soilandpimp.batch.domain;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
@@ -41,11 +42,12 @@ public class Event {
     @Column("jvc_url")
     private String jvcUrl;
 
-    @JsonProperty(value = "open_dt")
     @Column("open_date")
-    private Date openDate;
+    private LocalDateTime openDate;
 
     private List<Schedule> schedules;
+
+    private boolean broadcast;
 
     // Cassandra constructor
     protected Event() {};
@@ -80,14 +82,15 @@ public class Event {
 
     }
 
-    // Cassandra Accessors *********************************************
+    // Modified Accessors *********************************************
     @JsonSetter("open_dt")
     protected void setOpenDate(String openDate) {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.openDate = LocalDateTime.parse(openDate, formatter);
     }
 
-    public String getScheduleHash() {
-        return null; // TODO finish
+    public void markAsBrodcast() {
+        this.broadcast = true;
     }
 
     // Default Accessors *********************************************
@@ -115,12 +118,16 @@ public class Event {
         return jvcUrl;
     }
 
-    public Date getOpenDate() {
+    public LocalDateTime getOpenDate() {
         return openDate;
     }
 
-    public List<Schedule> geEventSchedules() {
+    public List<Schedule> getSchedules() {
         return schedules;
+    }
+
+    public boolean isBroadcast() {
+        return broadcast;
     }
 
     @Override

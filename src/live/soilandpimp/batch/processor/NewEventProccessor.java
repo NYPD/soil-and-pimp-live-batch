@@ -21,18 +21,18 @@ public class NewEventProccessor implements ItemProcessor<Event, Event> {
     private Map<String, Event> pastEventsByKey = new HashMap<>();
 
     public NewEventProccessor(EventRepository eventRepository) {
-
-        Iterable<Event> findAll = eventRepository.findAll();
-
-        for (Event event : findAll)
-            pastEventsByKey.put(event.getEventKey(), event);
+        eventRepository.findAll().forEach(event -> pastEventsByKey.put(event.getEventKey(), event));
     }
 
     @Override
     public Event process(Event event) throws Exception {
 
-        boolean isNewEvent = pastEventsByKey.get(event.getEventKey()) == null;
-        return isNewEvent? event : null;
+        Event pastEvent = pastEventsByKey.get(event.getEventKey());
+        boolean isNewEvent = pastEvent == null;
+        boolean newSchedules = isNewEvent? true
+                : event.getSchedules().hashCode() != pastEvent.getSchedules().hashCode();
+
+        return (isNewEvent || newSchedules)? event : null;
     }
 
 }

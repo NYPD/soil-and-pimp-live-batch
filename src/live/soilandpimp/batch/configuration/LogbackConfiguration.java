@@ -30,7 +30,7 @@ import live.soilandpimp.batch.util.AppConstants;
 public class LogbackConfiguration {
 
     private final String encoderPattern = "%d{[yyyy-MM-dd HH:mm:ss.SSS]} [%-5level]\\(%F{0}:%M\\(\\):%L\\) - %msg%n";
-    private final String filePattern = "/tomcat/logs/" + AppConstants.PROJECT_NAME + "/moe-logs.%d{yyyy-MM-dd}.log";
+    private final String filePattern = "/logs/" + AppConstants.PROJECT_NAME + "/moe-logs.%d{yyyy-MM-dd}.log";
     private final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
     @Autowired
