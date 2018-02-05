@@ -31,3 +31,4 @@ $RECYCLE.BIN/
 ##########################
 
 cassandra.properties
+mailer.properties

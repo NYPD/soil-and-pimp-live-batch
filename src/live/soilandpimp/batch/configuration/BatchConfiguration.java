@@ -1,8 +1,6 @@
 package live.soilandpimp.batch.configuration;
 
 import org.simplejavamail.mailer.Mailer;
-import org.simplejavamail.mailer.MailerBuilder;
-import org.simplejavamail.mailer.config.TransportStrategy;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -35,7 +33,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @Configuration
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
-@Import(value = {CassandraConfiguration.class, LogbackConfiguration.class})
+@Import(value = {CassandraConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
 public class BatchConfiguration {
 
     @Autowired
@@ -77,17 +75,6 @@ public class BatchConfiguration {
                                       .processor(new EmailProcesscor(emailRepository, mailer))
                                       .writer(new EventWriter(eventRepository))
                                       .build();
-    }
-
-    @Bean
-    public Mailer mailer() {
-        return MailerBuilder.withSMTPServerHost("smtp.gmail.com")// TODO add properties file for
-                                                                 // this
-                            .withSMTPServerPort(465)
-                            .withSMTPServerUsername("nypd545@gmail.com")
-                            .withSMTPServerPassword("qvmfeaxhfokmzdpv")
-                            .withTransportStrategy(TransportStrategy.SMTPS)
-                            .buildMailer();
     }
 
     @Bean
