@@ -47,17 +47,19 @@ public class Event {
 
     private List<Schedule> schedules;
 
+    @Column("schedule_change")
+    private boolean scheduleChange;
     private boolean broadcast;
 
     // Cassandra constructor
     protected Event() {};
 
     /**
-     * Uses the {@link Event}'s name and jvcurl dates to construct a unique event key with the help
-     * of an MD5 hashing computation. <br>
+     * Uses the {@link Event}'s name and jvcurl dates to construct a unique event key with the help of an MD5 hashing
+     * computation. <br>
      * <br>
-     * This should pretty much guarantee us a unique key due to the significant low volume of Soil
-     * and "Pimp" Sessions events.
+     * This should pretty much guarantee us a unique key due to the significant low volume of Soil and "Pimp" Sessions
+     * events.
      * 
      */
     public Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "url") String jvcUrl) {
@@ -87,6 +89,14 @@ public class Event {
     protected void setOpenDate(String openDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.openDate = LocalDateTime.parse(openDate, formatter);
+    }
+
+    /*
+     * We set broadcast back to false since due to schedule change, we need to re-broadcast this event to users
+     */
+    public void markAsScheduledChange() {
+        this.scheduleChange = true;
+        this.broadcast = false;
     }
 
     public void markAsBrodcast() {
@@ -124,6 +134,10 @@ public class Event {
 
     public List<Schedule> getSchedules() {
         return schedules;
+    }
+
+    public boolean isScheduleChange() {
+        return scheduleChange;
     }
 
     public boolean isBroadcast() {

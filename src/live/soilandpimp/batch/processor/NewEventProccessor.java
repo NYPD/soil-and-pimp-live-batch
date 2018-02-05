@@ -29,8 +29,9 @@ public class NewEventProccessor implements ItemProcessor<Event, Event> {
 
         Event pastEvent = pastEventsByKey.get(event.getEventKey());
         boolean isNewEvent = pastEvent == null;
-        boolean newSchedules = isNewEvent? true
-                : event.getSchedules().hashCode() != pastEvent.getSchedules().hashCode();
+        boolean newSchedules = !isNewEvent && event.getSchedules().hashCode() != pastEvent.getSchedules().hashCode();
+
+        if (newSchedules) event.markAsScheduledChange();
 
         return (isNewEvent || newSchedules)? event : null;
     }
