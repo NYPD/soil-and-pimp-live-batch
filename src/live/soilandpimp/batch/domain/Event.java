@@ -101,6 +101,7 @@ public class Event {
 
     public void markAsBrodcast() {
         this.broadcast = true;
+        this.scheduleChange = false;
     }
 
     // Default Accessors *********************************************
