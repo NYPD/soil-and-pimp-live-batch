@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment;
 
 import live.soilandpimp.batch.annotation.DevelopmentProfile;
 import live.soilandpimp.batch.annotation.ProductionProfile;
+import live.soilandpimp.batch.annotation.TestProfile;
 
 @Configuration
 @PropertySource(value = {"classpath:resource/mailer.properties"})
@@ -20,6 +21,7 @@ public class MailerConfiguration {
     private Environment springEnvironment;
 
     @Bean
+    @TestProfile
     @DevelopmentProfile
     public Mailer devMailer() {
         return MailerBuilder.withSMTPServerHost(springEnvironment.getProperty("mailer.dev.host"))

@@ -35,10 +35,10 @@ public class Event {
 
     private String memo;
 
-    @JsonProperty(value = "link_url")
     @Column("event_url")
     private String eventUrl;
 
+    @JsonProperty(value = "url")
     @Column("jvc_url")
     private String jvcUrl;
 
@@ -61,13 +61,17 @@ public class Event {
      * This should pretty much guarantee us a unique key due to the significant low volume of Soil and "Pimp" Sessions
      * events.
      * 
+     * Ms. Jackson only constructer
      */
-    public Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "url") String jvcUrl) {
+    protected Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "link_url") String eventUrl) {
+
+        if (name == null || eventUrl == null)
+            throw new IllegalArgumentException("name nor event url can be null");
 
         this.name = name;
-        this.jvcUrl = jvcUrl;
+        this.eventUrl = eventUrl;
 
-        String tempCompositeKey = name + jvcUrl;
+        String tempCompositeKey = name + eventUrl;
         // This exception should never happen, MD5 should always be present
         try {
 

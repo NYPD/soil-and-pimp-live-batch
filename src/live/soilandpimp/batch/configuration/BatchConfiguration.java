@@ -18,16 +18,19 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
+import live.soilandpimp.batch.annotation.DevelopmentProfile;
+import live.soilandpimp.batch.annotation.ProductionProfile;
 import live.soilandpimp.batch.dao.DAO;
-import live.soilandpimp.batch.dao.JvcMusicJsonDao;
+import live.soilandpimp.batch.dao.JvcJsonWebEventDao;
 import live.soilandpimp.batch.domain.Event;
-import live.soilandpimp.batch.processor.EmailProcesscor;
+import live.soilandpimp.batch.processor.EmailProcessor;
 import live.soilandpimp.batch.processor.NewEventProccessor;
 import live.soilandpimp.batch.reader.NewEventReader;
 import live.soilandpimp.batch.reader.SiteEventReader;
 import live.soilandpimp.batch.repositories.EmailRepository;
 import live.soilandpimp.batch.repositories.EventRepository;
 import live.soilandpimp.batch.service.Service;
+import live.soilandpimp.batch.util.EventContentProvidor;
 import live.soilandpimp.batch.writer.EventWriter;
 
 @Configuration
@@ -41,7 +44,7 @@ public class BatchConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
     @Autowired
-    private JvcMusicJsonDao jvcMusicJsonDao;
+    private JvcJsonWebEventDao jvcMusicJsonDao;
     @Autowired
     private EventRepository eventRepository;
     @Autowired
@@ -72,7 +75,7 @@ public class BatchConfiguration {
         return this.stepBuilderFactory.get("emailNewEvents")
                                       .<Event, Event>chunk(10)
                                       .reader(new NewEventReader(eventRepository))
-                                      .processor(new EmailProcesscor(emailRepository, mailer))
+                                      .processor(new EmailProcessor(emailRepository, mailer))
                                       .writer(new EventWriter(eventRepository))
                                       .build();
     }
@@ -86,6 +89,13 @@ public class BatchConfiguration {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         return objectMapper;
+    }
+
+    @Bean
+    @DevelopmentProfile
+    @ProductionProfile
+    public EventContentProvidor eventContentProvidor() {
+        return new EventContentProvidor();
     }
 
 }

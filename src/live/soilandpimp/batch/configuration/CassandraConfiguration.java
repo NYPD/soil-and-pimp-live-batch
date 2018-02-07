@@ -1,6 +1,5 @@
 package live.soilandpimp.batch.configuration;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -9,11 +8,15 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 
 import com.datastax.driver.core.AuthProvider;
 
+import live.soilandpimp.batch.annotation.DevelopmentProfile;
+import live.soilandpimp.batch.annotation.ProductionProfile;
 import live.soilandpimp.batch.domain.Domain;
 import live.soilandpimp.batch.repositories.Repository;
 import live.soilandpimp.batch.util.AppConstants;
 
 @Configuration
+@DevelopmentProfile
+@ProductionProfile
 @PropertySource(value = {"classpath:resource/cassandra.properties"})
 @EnableCassandraRepositories(basePackageClasses = {Repository.class})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {

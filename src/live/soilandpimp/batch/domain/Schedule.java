@@ -31,6 +31,9 @@ public class Schedule {
     @JsonProperty(value = "link_url")
     private String link;
 
+    //Ms.Jackson Constructor
+    protected Schedule() {}
+
     // Modified Accessors *********************************************
     @JsonSetter
     protected void setDate(String date) {

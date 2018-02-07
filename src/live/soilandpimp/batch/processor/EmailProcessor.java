@@ -14,12 +14,12 @@ import live.soilandpimp.batch.domain.Event;
 import live.soilandpimp.batch.domain.Schedule;
 import live.soilandpimp.batch.repositories.EmailRepository;
 
-public class EmailProcesscor implements ItemProcessor<Event, Event> {
+public class EmailProcessor implements ItemProcessor<Event, Event> {
 
     private List<EmailSubscription> emailSubscriptions = new ArrayList<>();
     private Mailer mailer;
 
-    public EmailProcesscor(EmailRepository emailRepository, Mailer mailer) {
+    public EmailProcessor(EmailRepository emailRepository, Mailer mailer) {
         emailRepository.findAll().forEach(emailSubscriptions::add);
         this.mailer = mailer;
     }

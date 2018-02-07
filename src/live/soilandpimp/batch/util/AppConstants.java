@@ -12,6 +12,7 @@ public class AppConstants {
 
     public static final String DEV_PROFILE = "DEV";
     public static final String PRODUCTION_PROFILE = "PROD";
+    public static final String TEST_PROFILE = "TEST";
 
     public static final String CASSANDRA_KEYSPACE = "soilandpimp";
 

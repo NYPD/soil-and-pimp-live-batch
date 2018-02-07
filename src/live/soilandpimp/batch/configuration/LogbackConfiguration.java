@@ -35,7 +35,7 @@ public class LogbackConfiguration {
 
     @Autowired
     private Environment springEnviroment;
-    @Autowired
+    @Autowired(required = false)
     private List<Appender<ILoggingEvent>> appenders;
 
     @Bean
@@ -100,8 +100,21 @@ public class LogbackConfiguration {
 
     }
 
+    private PatternLayoutEncoder getDefaultPattern() {
+
+        PatternLayoutEncoder patternLayoutEncoder = new PatternLayoutEncoder();
+        patternLayoutEncoder.setContext(loggerContext);
+        patternLayoutEncoder.setPattern(encoderPattern);
+        patternLayoutEncoder.start();
+
+        return patternLayoutEncoder;
+
+    }
+
     @PostConstruct
     public void initLogbackAppenders() {
+
+        if (appenders == null) return;
 
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         root.detachAndStopAllAppenders();
@@ -112,24 +125,13 @@ public class LogbackConfiguration {
         String[] activeProfiles = springEnviroment.getActiveProfiles();
 
         boolean isDevelopment = Arrays.stream(activeProfiles)
-                .filter(x -> AppConstants.DEV_PROFILE.equals(x))
-                .findAny()
-                .orElse(null) != null;
+                                      .filter(x -> AppConstants.DEV_PROFILE.equals(x))
+                                      .findAny()
+                                      .orElse(null) != null;
 
         Level loggingLevel = isDevelopment? Level.DEBUG : Level.INFO;
 
         root.setLevel(loggingLevel);
-
-    }
-
-    private PatternLayoutEncoder getDefaultPattern() {
-
-        PatternLayoutEncoder patternLayoutEncoder = new PatternLayoutEncoder();
-        patternLayoutEncoder.setContext(loggerContext);
-        patternLayoutEncoder.setPattern(encoderPattern);
-        patternLayoutEncoder.start();
-
-        return patternLayoutEncoder;
 
     }
 

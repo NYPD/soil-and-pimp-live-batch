@@ -7,15 +7,15 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
-import live.soilandpimp.batch.dao.JvcMusicJsonDao;
+import live.soilandpimp.batch.dao.JvcJsonWebEventDao;
 import live.soilandpimp.batch.domain.Event;
 
 public class SiteEventReader implements ItemReader<Event> {
 
     private List<Event> events;
 
-    public SiteEventReader(JvcMusicJsonDao jvcMusicJsonDao) {
-        this.events = jvcMusicJsonDao.getCurrentSiteEvents();
+    public SiteEventReader(JvcJsonWebEventDao jvcMusicJsonDao) {
+        this.events = jvcMusicJsonDao.getCurrentPostedEvents();
     }
 
     @Override
