@@ -1,49 +1,68 @@
 package repository;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.thrift.transport.TTransportException;
+import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import configuration.EmbeddedCassandraConfiguration;
+import configuration.JvcJsonWebEventDaoConfiguration;
 import live.soilandpimp.batch.configuration.BatchConfiguration;
-import live.soilandpimp.batch.domain.Event;
 import live.soilandpimp.batch.repositories.EventRepository;
+import live.soilandpimp.batch.util.AppConstants;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {BatchConfiguration.class, EmbeddedCassandraConfiguration.class})
+@ActiveProfiles({AppConstants.TEST_PROFILE})
+@ContextConfiguration(classes = {BatchConfiguration.class, EmbeddedCassandraConfiguration.class,
+                                 JvcJsonWebEventDaoConfiguration.class})
 public class EventRepositoryTest {
 
     @Autowired
     private EventRepository eventRepository;
-    private static Event event = null;
 
-    public static final String KEYSPACE_CREATION_QUERY = "CREATE KEYSPACE IF NOT EXISTS testKeySpace WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '3' };";
+    /*
+     * This is so dirty, cassandra-unit does not seem to run if there there is already a log4j-embedded-cassandra.propeties
+     */
+    @BeforeClass
+    public static void startCassandraEmbedded() throws InterruptedException, TTransportException, IOException, URISyntaxException {
 
-    public static final String KEYSPACE_ACTIVATE_QUERY = "USE testKeySpace;";
-    //
-    //    @Before
-    //    public static void startCassandraEmbedded() throws InterruptedException, TTransportException, ConfigurationException, IOException {
-    //
-    //        System.out.println("Server Started at 127.0.0.1:9142... ");
-    //        Session session = cluster.connect("soilandpimp");
-    //        //session.execute(KEYSPACE_CREATION_QUERY);
-    //        //session.execute(KEYSPACE_ACTIVATE_QUERY);
-    //
-    //        session.execute("CREATE TABLE myTable(id varchar,value varchar,PRIMARY KEY(id));");
-    //
-    //        session.execute("INSERT INTO myTable(id, value) values('myKey01','myValue01');");
-    //        ResultSet execute = session.execute("SELECT * FROM myTable;");
-    //        System.out.println(execute.iterator().next().getString("value"));
-    //        System.out.println("KeySpace created and activated.");
-    //        Thread.sleep(5000);
-    //    }
+        URL url = EventRepositoryTest.class.getClassLoader().getResource("resources/another-cassandra.yaml");
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra(new File(url.toURI()), 10000);
+    }
 
     @Test
     public void shoulFindByBroadcastIsFalse() {
+
+        assertThat("", is(""));
         System.out.println(eventRepository);
         System.out.println("KeySpace created and activated.");
     }
 
+    @AfterClass
+    public static void stopCassandraEmbedded() throws InterruptedException, TTransportException, IOException {
+
+        EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
+
+        File directory = new File("target/embeddedCassandra");
+        try {
+            Thread.sleep(5000);
+            FileUtils.deleteDirectory(directory);
+        } catch (Exception e) {}
+
+    }
 }
