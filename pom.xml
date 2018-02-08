@@ -80,7 +80,7 @@
       <version>1.1.11</version>
     </dependency>
 
-    <!-- Ms. Jackson -->
+    <!-- Ms. Jackson (I'm sorry) -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -132,37 +132,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.cassandraunit</groupId>
-      <artifactId>cassandra-unit-spring</artifactId>
-      <version>3.3.0.2</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.cassandraunit</groupId>
-          <artifactId>cassandra-unit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.cassandraunit</groupId>
-      <artifactId>cassandra-unit</artifactId>
-      <version>3.3.0.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>19.0</version>
+      <groupId>info.archinnov</groupId>
+      <artifactId>achilles-embedded</artifactId>
+      <version>5.3.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
 
-
   <build>
 
     <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>junit</testSourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
 
     <finalName>${project.artifactId}</finalName>
 
@@ -176,11 +157,11 @@
 
     <testResources>
       <testResource>
-        <directory>junit/configuration</directory>
+        <directory>test/configuration</directory>
       </testResource>
       <testResource>
         <targetPath>setup</targetPath>
-        <directory>junit/setup</directory>
+        <directory>test/setup</directory>
       </testResource>
     </testResources>
 

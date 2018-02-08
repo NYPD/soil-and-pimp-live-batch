@@ -14,7 +14,7 @@ import live.soilandpimp.batch.annotation.ProductionProfile;
 import live.soilandpimp.batch.annotation.TestProfile;
 
 @Configuration
-@PropertySource(value = {"classpath:resource/mailer.properties"})
+@PropertySource(value = {"classpath:resources/mailer.properties"})
 public class MailerConfiguration {
 
     @Autowired

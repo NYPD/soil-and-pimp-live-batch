@@ -23,7 +23,7 @@ public class JvcJsonWebEventDaoConfiguration {
         EventContentProvidor contentProviderMock = mock(EventContentProvidor.class);
         InputStream soilJson = null;
 
-        soilJson = this.getClass().getClassLoader().getResourceAsStream("resources/soil.json");
+        soilJson = this.getClass().getClassLoader().getResourceAsStream("setup/soil.json");
         byte[] soilJsonContent = StreamUtils.copyToByteArray(soilJson);
 
         when(contentProviderMock.getContent()).thenReturn(soilJsonContent);

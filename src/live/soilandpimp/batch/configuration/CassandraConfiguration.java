@@ -17,7 +17,7 @@ import live.soilandpimp.batch.util.AppConstants;
 @Configuration
 @DevelopmentProfile
 @ProductionProfile
-@PropertySource(value = {"classpath:resource/cassandra.properties"})
+@PropertySource(value = {"classpath:resources/cassandra.properties"})
 @EnableCassandraRepositories(basePackageClasses = {Repository.class})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
 

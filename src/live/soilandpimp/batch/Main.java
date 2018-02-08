@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
+import live.soilandpimp.batch.util.AppConstants;
+
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class Main {
@@ -15,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws IOException, JSONException {
 
         SpringApplication springApplication = new SpringApplication(Main.class);
-        springApplication.setAdditionalProfiles("DEV");
+        springApplication.setAdditionalProfiles(AppConstants.DEV_PROFILE);
 
         springApplication.run(args);
 
