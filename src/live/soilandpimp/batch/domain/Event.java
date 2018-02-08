@@ -63,7 +63,7 @@ public class Event {
      * 
      * Ms. Jackson only constructer
      */
-    public Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "link_url") String eventUrl) {
+    protected Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "link_url") String eventUrl) {
 
         if (name == null || eventUrl == null)
             throw new IllegalArgumentException("name nor event url can be null");
