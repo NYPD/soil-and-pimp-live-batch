@@ -11,6 +11,7 @@ classes
 .project
 .classpath
 .settings
+.toDelete
 
 ######################
 ## Windows detritus ##
