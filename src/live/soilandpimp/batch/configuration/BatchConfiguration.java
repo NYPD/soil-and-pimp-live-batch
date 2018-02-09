@@ -53,8 +53,8 @@ public class BatchConfiguration {
     private Mailer mailer;
 
     @Bean
-    public Job addNewEventsJob() {
-        return this.jobBuilderFactory.get("checkForNewEvents")
+    public Job addAndEmailEventsJob() {
+        return this.jobBuilderFactory.get("addAndEmailEvents")
                                      .start(addNewEvents())
                                      .next(emailNewEvents())
                                      .build();

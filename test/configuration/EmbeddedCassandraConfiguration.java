@@ -30,6 +30,11 @@ public class EmbeddedCassandraConfiguration extends AbstractCassandraConfigurati
         Cluster buildNativeCluster = CassandraEmbeddedServerBuilder.builder()
                                                                    .withKeyspaceName(AppConstants.CASSANDRA_KEYSPACE)
                                                                    .withScript("setup/soilandpimp.cql")
+                                                                   .withBroadcastAddress("127.0.0.1")
+                                                                   .withListenAddress("127.0.0.1")
+                                                                   .withRpcAddress("127.0.0.1")
+                                                                   .withBroadcastRpcAddress("127.0.0.1")
+                                                                   .useUnsafeCassandraDeamon()
                                                                    .withShutdownHook(new CassandraShutDownHook())
                                                                    .buildNativeCluster();
 
@@ -39,6 +44,11 @@ public class EmbeddedCassandraConfiguration extends AbstractCassandraConfigurati
         cassandraSessionFactoryBean.setConverter(super.cassandraConverter());
 
         return cassandraSessionFactoryBean;
+    }
+
+    @Override
+    protected String getContactPoints() {
+        return "127.0.0.1";
     }
 
     @Override
