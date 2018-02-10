@@ -7,6 +7,7 @@ import org.springframework.data.cassandra.config.java.AbstractCassandraConfigura
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 import com.datastax.driver.core.AuthProvider;
+import com.datastax.driver.core.PlainTextAuthProvider;
 
 import live.soilandpimp.batch.annotation.DevelopmentProfile;
 import live.soilandpimp.batch.annotation.ProductionProfile;
@@ -24,6 +25,12 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
     @Value("${cassandra.contanct_points}")
     private String cassandraContactPoints;
 
+    @Value("${cassandra.username}")
+    private String cassandraUserName;
+
+    @Value("${cassandra.password}")
+    private String cassandraPassword;
+
     @Override
     protected String getKeyspaceName() {
         return AppConstants.CASSANDRA_KEYSPACE;
@@ -36,7 +43,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
     @Override
     protected AuthProvider getAuthProvider() {
-        return super.getAuthProvider();
+        return new PlainTextAuthProvider(cassandraUserName, cassandraPassword);
     }
 
     @Override
