@@ -1,9 +1,9 @@
 package processor;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.simplejavamail.email.Email;
 import org.simplejavamail.mailer.Mailer;
 
@@ -66,9 +67,19 @@ public class EmailProcessorTest {
 
         EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer);
 
+        ArgumentCaptor<Email> argument = ArgumentCaptor.forClass(Email.class);
+
         emailProcessor.process(mockEvent);
 
-        verify(mailer, times(2)).sendMail(any(Email.class));
+        verify(mailer, times(2)).sendMail(argument.capture());
+
+        Email emailSent = argument.getValue();
+
+        String subject = emailSent.getSubject();
+        String htmlText = emailSent.getHTMLText();
+
+        assertThat(subject, is("SOIL & \"PIMP\" SESSIONS schedule update"));
+        assertThat(htmlText, is(notNullValue()));
         verify(mockEvent, times(1)).markAsBrodcast();
 
     }
