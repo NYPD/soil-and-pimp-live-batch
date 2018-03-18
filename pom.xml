@@ -72,7 +72,7 @@
     <dependency>
       <groupId>org.simplejavamail</groupId>
       <artifactId>simple-java-mail</artifactId>
-      <version>5.0.0.rc2-SNAPSHOT</version>
+      <version>5.0.1</version>
     </dependency>
     <dependency>
       <groupId>net.markenwerk</groupId>
