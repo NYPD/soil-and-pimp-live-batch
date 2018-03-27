@@ -13,3 +13,6 @@ mailer.prod.host=
 mailer.prod.username=  
 mailer.prod.password=  
 mailer.prod.port=  
+
+mailer.prod.webapp.domain=
+mailer.dev.webapp.domain=

@@ -1,5 +1,7 @@
 package live.soilandpimp.batch.configuration;
 
+import java.util.Arrays;
+
 import org.simplejavamail.mailer.Mailer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -30,6 +34,7 @@ import live.soilandpimp.batch.reader.SiteEventReader;
 import live.soilandpimp.batch.repositories.EmailRepository;
 import live.soilandpimp.batch.repositories.EventRepository;
 import live.soilandpimp.batch.service.Service;
+import live.soilandpimp.batch.util.AppConstants;
 import live.soilandpimp.batch.util.EventContentProvidor;
 import live.soilandpimp.batch.writer.EventWriter;
 
@@ -37,6 +42,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
 @Import(value = {CassandraConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
+@PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true )
 public class BatchConfiguration {
 
     @Autowired
@@ -51,6 +57,8 @@ public class BatchConfiguration {
     private EmailRepository emailRepository;
     @Autowired
     private Mailer mailer;
+    @Autowired
+    private Environment springEnvironment;
 
     @Bean
     public Job addAndEmailEventsJob() {
@@ -72,10 +80,18 @@ public class BatchConfiguration {
 
     @Bean
     public Step emailNewEvents() {
+
+        String[] activeProfiles = springEnvironment.getActiveProfiles();
+        boolean isDevelopment = Arrays.stream(activeProfiles).filter(x -> AppConstants.DEV_PROFILE.equals(x))
+                .findAny().orElse(null) != null;
+
+        String webappUrl = isDevelopment? springEnvironment.getProperty("mailer.dev.webapp.domain")
+                : springEnvironment.getProperty("mailer.prod.webapp.domain");
+
         return this.stepBuilderFactory.get("emailNewEvents")
                                       .<Event, Event>chunk(10)
                                       .reader(new NewEventReader(eventRepository))
-                                      .processor(new EmailProcessor(emailRepository, mailer))
+                                      .processor(new EmailProcessor(emailRepository, mailer, webappUrl))
                                       .writer(new EventWriter(eventRepository))
                                       .build();
     }

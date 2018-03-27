@@ -18,10 +18,12 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
     private List<EmailSubscription> emailSubscriptions = new ArrayList<>();
     private Mailer mailer;
+    private String webappUrl;
 
-    public EmailProcessor(EmailRepository emailRepository, Mailer mailer) {
+    public EmailProcessor(EmailRepository emailRepository, Mailer mailer, String webappUrl) {
         emailRepository.findAll().forEach(emailSubscriptions::add);
         this.mailer = mailer;
+        this.webappUrl = webappUrl;
     }
 
     @Override
@@ -41,6 +43,8 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
         for (EmailSubscription emailSubscription : emailSubscriptions) {
 
+            populatingBuilder.appendTextHTML(buildUnsubscribeEmailLink(emailSubscription));
+            
             Email email = EmailBuilder.copying(populatingBuilder)
                                       .to(emailSubscription.getEmailAddress())
                                       .buildEmail();
@@ -96,6 +100,26 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
         return stringBuffer.toString();
 
+    }
+
+    private String buildUnsubscribeEmailLink(EmailSubscription emailSubscription) {
+
+        String emailAddress = emailSubscription.getEmailAddress();
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("<hr>");
+        stringBuffer.append("<p>");
+        stringBuffer.append("You are recieving this email because ");
+        stringBuffer.append(emailAddress);
+        stringBuffer.append(" is signed up to recieve SOIL & \"PIMP\" SESSIONS event notifications.");
+        stringBuffer.append(" If you dont want to recieve these emails anymore you may ");
+        stringBuffer.append("<a href=\"");
+        stringBuffer.append(webappUrl);
+        stringBuffer.append("/unsubscribe-from-email?email=");
+        stringBuffer.append(emailAddress);
+        stringBuffer.append("\">unsubscribe.</a>");
+
+        return stringBuffer.toString();
     }
 
 }

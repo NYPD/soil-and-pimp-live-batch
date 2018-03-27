@@ -44,7 +44,7 @@ public class EmailProcessorTest {
         EmailRepository emailRepository = mock(EmailRepository.class);
         when(emailRepository.findAll()).thenReturn(Collections.emptyList());
 
-        EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer);
+        EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer, "localhost:8080");
 
         Event process = emailProcessor.process(mockEvent);
 
@@ -65,7 +65,7 @@ public class EmailProcessorTest {
         when(emailRepository.findAll()).thenReturn(new ArrayList<EmailSubscription>(
                 Arrays.asList(mockEmailSubscription, mockEmailSubscription)));
 
-        EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer);
+        EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer, "localhost:8080");
 
         ArgumentCaptor<Email> argument = ArgumentCaptor.forClass(Email.class);
 
