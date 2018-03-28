@@ -35,6 +35,7 @@ public class Event {
 
     private String memo;
 
+    @JsonProperty(value = "link_url")
     @Column("event_url")
     private String eventUrl;
 
@@ -63,13 +64,11 @@ public class Event {
      * 
      * Ms. Jackson only constructer
      */
-    protected Event(@JsonProperty(value = "live-event_nm") String name, @JsonProperty(value = "link_url") String eventUrl) {
+    protected Event(@JsonProperty(value = "live-event_nm") String name) {
 
-        if (name == null || eventUrl == null)
-            throw new IllegalArgumentException("name nor event url can be null");
+        if (name == null) throw new IllegalArgumentException("name can not be null");
 
         this.name = name;
-        this.eventUrl = eventUrl;
 
         String tempCompositeKey = name + eventUrl;
         // This exception should never happen, MD5 should always be present
