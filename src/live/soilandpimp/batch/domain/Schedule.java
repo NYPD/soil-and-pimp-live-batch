@@ -27,6 +27,7 @@ public class Schedule {
     @JsonProperty(value = "prefecture_nm")
     private String prefecture;
     private String place;
+    private String call;
     private String memo;
     @JsonProperty(value = "link_url")
     private String link;
@@ -59,6 +60,10 @@ public class Schedule {
 
     public String getPlace() {
         return place;
+    }
+
+    public String getCall() {
+        return call;
     }
 
     public String getMemo() {
