@@ -98,7 +98,7 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
             if (hasStartTime) stringBuffer.append("<li><strong>Start Time: </strong>" + startTime + "</li>");
 
             boolean hasCall = !"".equals(call);
-            if (hasCall) stringBuffer.append("<li><strong>Questions: </strong>" + call + "</li>");
+            if (hasCall) stringBuffer.append("<li><strong>Inqueries: </strong>" + call + "</li>");
 
             boolean hasLink = !"".equals(link);
             if (hasLink) stringBuffer.append("<li><a href=\"" + link + "\">" + link + "<a/></li>");
