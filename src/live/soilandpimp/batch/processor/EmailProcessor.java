@@ -77,6 +77,8 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
             String prefecture = schedule.getPrefecture();
             String enterTime = schedule.getEnterTime();
             String startTime = schedule.getStartTime();
+            String call = schedule.getCall();
+            String link = schedule.getLink();
 
             stringBuffer.append("<ul>");
             stringBuffer.append("<li>" + schedule.getDate() + "</li>");
@@ -94,6 +96,12 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
             boolean hasStartTime = !"".equals(startTime);
             if (hasStartTime) stringBuffer.append("<li><strong>Start Time: </strong>" + startTime + "</li>");
+
+            boolean hasCall = !"".equals(call);
+            if (hasCall) stringBuffer.append("<li><strong>Questions: </strong>" + call + "</li>");
+
+            boolean hasLink = !"".equals(link);
+            if (hasLink) stringBuffer.append("<li><a href=\"" + link + "\">" + link + "<a/></li>");
 
             stringBuffer.append("</ul>");
         }
