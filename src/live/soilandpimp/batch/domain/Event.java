@@ -70,12 +70,11 @@ public class Event {
 
         this.name = name;
 
-        String tempCompositeKey = name + eventUrl;
         // This exception should never happen, MD5 should always be present
         try {
 
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(tempCompositeKey.getBytes());
+            messageDigest.update(this.name.getBytes());
             byte[] digest = messageDigest.digest();
 
             String eventKeyHash = DatatypeConverter.printHexBinary(digest);
