@@ -41,7 +41,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @Configuration
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
-@Import(value = {CassandraConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
+@Import(value = {JpaConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
 @PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true )
 public class BatchConfiguration {
 

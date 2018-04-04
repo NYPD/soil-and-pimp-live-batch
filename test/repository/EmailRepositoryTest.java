@@ -16,9 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.datastax.driver.core.Session;
-
-import configuration.EmbeddedCassandraConfiguration;
+import configuration.EmbeddedDateSourceConfiguration;
 import configuration.JvcJsonWebEventDaoConfiguration;
 import live.soilandpimp.batch.configuration.BatchConfiguration;
 import live.soilandpimp.batch.domain.EmailSubscription;
@@ -28,29 +26,16 @@ import live.soilandpimp.batch.util.AppConstants;
 @RunWith(SpringRunner.class)
 @ActiveProfiles({AppConstants.TEST_PROFILE})
 @ContextConfiguration(classes = {BatchConfiguration.class,
-                                 EmbeddedCassandraConfiguration.class,
+                                 EmbeddedDateSourceConfiguration.class,
                                  JvcJsonWebEventDaoConfiguration.class})
 public class EmailRepositoryTest {
 
-    @Autowired
-    private Session session;
     @Autowired
     private EmailRepository emailRepository;
 
     @Test
     public void shoulFindAllEmailSubscriptions() {
 
-        StringBuilder query = new StringBuilder();
-        query.append(" BEGIN BATCH ")
-             .append(" INSERT INTO soilandpimp.email_subscriptions (email_address)")
-             .append(" VALUES ('1@1.com');")
-             .append(" INSERT INTO soilandpimp.email_subscriptions (email_address)")
-             .append(" VALUES ('2@2.com');")
-             .append(" INSERT INTO soilandpimp.email_subscriptions (email_address)")
-             .append(" VALUES ('3@3.com');")
-             .append(" APPLY BATCH");
-
-        session.execute(query.toString());
 
         Iterable<EmailSubscription> findAll = emailRepository.findAll();
         assertThat(((Collection<?>) findAll).size(), is(3));

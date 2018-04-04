@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import configuration.FakeCassandraServerConfiguration;
+import configuration.EmbeddedDateSourceConfiguration;
 import configuration.JvcJsonWebEventDaoConfiguration;
 import live.soilandpimp.batch.configuration.BatchConfiguration;
 import live.soilandpimp.batch.dao.JvcJsonWebEventDao;
@@ -26,7 +26,7 @@ import live.soilandpimp.batch.util.AppConstants;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles(AppConstants.TEST_PROFILE)
-@ContextConfiguration(classes = {BatchConfiguration.class, FakeCassandraServerConfiguration.class,
+@ContextConfiguration(classes = {BatchConfiguration.class, EmbeddedDateSourceConfiguration.class,
                                  JvcJsonWebEventDaoConfiguration.class})
 public class JvcJsonWebEventDaoTest {
 

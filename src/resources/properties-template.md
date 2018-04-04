@@ -1,7 +1,6 @@
-##cassandra.properties
-cassandra.contanct_points=  
-cassandra.username=  
-cassandra.password=  
+##mysql.properties
+mysql.username=
+mysql.password=
 
 ##mailer.properties
 mailer.dev.host=  

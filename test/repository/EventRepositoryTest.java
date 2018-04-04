@@ -17,9 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.datastax.driver.core.Session;
-
-import configuration.EmbeddedCassandraConfiguration;
+import configuration.EmbeddedDateSourceConfiguration;
 import configuration.JvcJsonWebEventDaoConfiguration;
 import live.soilandpimp.batch.configuration.BatchConfiguration;
 import live.soilandpimp.batch.domain.Event;
@@ -29,27 +27,16 @@ import live.soilandpimp.batch.util.AppConstants;
 @RunWith(SpringRunner.class)
 @ActiveProfiles({AppConstants.TEST_PROFILE})
 @ContextConfiguration(classes = {BatchConfiguration.class,
-                                 EmbeddedCassandraConfiguration.class,
+                                 EmbeddedDateSourceConfiguration.class,
                                  JvcJsonWebEventDaoConfiguration.class})
 public class EventRepositoryTest {
 
-    @Autowired
-    private Session session;
     @Autowired
     private EventRepository eventRepository;
 
     @Test
     public void shoulFindByBroadcastIsFalse() {
 
-        StringBuilder query = new StringBuilder();
-        query.append(" BEGIN BATCH ")
-             .append(" INSERT INTO soilandpimp.events (event_key, name, broadcast, schedule_change)")
-             .append(" VALUES ('1', '1', true, false);")
-             .append(" INSERT INTO soilandpimp.events (event_key, name, broadcast, schedule_change)")
-             .append(" VALUES ('2', '2', false, false);")
-             .append(" APPLY BATCH");
-
-        session.execute(query.toString());
 
         Iterable<Event> findAll = eventRepository.findAll();
         assertThat(((Collection<?>) findAll).size(), is(2));

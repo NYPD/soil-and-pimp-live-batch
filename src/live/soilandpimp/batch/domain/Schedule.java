@@ -2,8 +2,9 @@ package live.soilandpimp.batch.domain;
 
 import java.time.LocalDate;
 
-import org.springframework.data.cassandra.mapping.Column;
-import org.springframework.data.cassandra.mapping.UserDefinedType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -14,15 +15,16 @@ import com.fasterxml.jackson.annotation.JsonSetter;
  * @author NYPD
  *
  */
-@UserDefinedType("schedule")
+@Entity
+@Table(name = "schedules")
 public class Schedule {
 
     private LocalDate date;
     @JsonProperty(value = "enter_tm")
-    @Column("enter_time")
+    @Column(name = "enter_time")
     private String enterTime;
     @JsonProperty(value = "start_tm")
-    @Column("start_time")
+    @Column(name = "start_time")
     private String startTime;
     @JsonProperty(value = "prefecture_nm")
     private String prefecture;

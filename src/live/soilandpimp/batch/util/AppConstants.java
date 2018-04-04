@@ -14,6 +14,7 @@ public class AppConstants {
     public static final String PRODUCTION_PROFILE = "PROD";
     public static final String TEST_PROFILE = "TEST";
 
-    public static final String CASSANDRA_KEYSPACE = "soilandpimp";
+    public static final String MYSQL_DEVELOPMENT_URL = "jdbc:mysql://casa.munoz.coffee:3306/soil_and_pimp";
+    public static final String MYSQL_PRODUCTION_URL = "jdbc:mysql://localhost:3306/soil_and_pimp";
 
 }

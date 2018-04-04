@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.DatatypeConverter;
-
-import org.springframework.data.cassandra.mapping.Column;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -21,34 +21,36 @@ import com.fasterxml.jackson.annotation.JsonSetter;
  * @author NYPD
  *
  */
-@Table(value = "events")
+@Entity
+@Table(name = "events")
 public class Event {
 
-    @PrimaryKey(value = "event_key")
+    @Id
+    @Column(name = "event_key")
     private String eventKey;
 
     private String name;
 
     @JsonProperty(value = "title_for_sns")
-    @Column("social_networking_title")
+    @Column(name = "social_networking_title")
     private String socialNetworkingTitle;
 
     private String memo;
 
     @JsonProperty(value = "link_url")
-    @Column("event_url")
+    @Column(name = "event_url")
     private String eventUrl;
 
     @JsonProperty(value = "url")
-    @Column("jvc_url")
+    @Column(name = "jvc_url")
     private String jvcUrl;
 
-    @Column("open_date")
+    @Column(name = "open_date")
     private LocalDateTime openDate;
 
     private List<Schedule> schedules;
 
-    @Column("schedule_change")
+    @Column(name = "schedule_change")
     private boolean scheduleChange;
     private boolean broadcast;
 
@@ -79,7 +81,7 @@ public class Event {
 
             String eventKeyHash = DatatypeConverter.printHexBinary(digest);
 
-            this.eventKey = eventKeyHash;
+            eventKey = eventKeyHash;
         } catch (NoSuchAlgorithmException e) {
             throw new AssertionError(e);
         }
@@ -97,13 +99,13 @@ public class Event {
      * We set broadcast back to false since due to schedule change, we need to re-broadcast this event to users
      */
     public void markAsScheduledChange() {
-        this.scheduleChange = true;
-        this.broadcast = false;
+        scheduleChange = true;
+        broadcast = false;
     }
 
     public void markAsBrodcast() {
-        this.broadcast = true;
-        this.scheduleChange = false;
+        broadcast = true;
+        scheduleChange = false;
     }
 
     // Default Accessors *********************************************

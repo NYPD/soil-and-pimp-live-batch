@@ -31,5 +31,5 @@ $RECYCLE.BIN/
 ## Sensitive Stuff Bruh ##
 ##########################
 
-cassandra.properties
+mysql.properties
 mailer.properties

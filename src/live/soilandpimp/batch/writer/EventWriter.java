@@ -17,7 +17,7 @@ public class EventWriter implements ItemWriter<Event> {
 
     @Override
     public void write(List<? extends Event> events) throws Exception {
-        this.eventRepository.save(events);
+        this.eventRepository.saveAll(events);
     }
 
 }

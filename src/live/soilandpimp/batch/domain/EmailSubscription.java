@@ -1,12 +1,16 @@
 package live.soilandpimp.batch.domain;
 
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Table("email_subscriptions")
+@Entity
+@Table(name = "email_subscriptions")
 public class EmailSubscription {
 
-    @PrimaryKey("email_address")
+    @Id
+    @Column(name = "email_address")
     private String emailAddress;
 
     // Cassandra constructor
