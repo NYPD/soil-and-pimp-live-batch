@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 @Table(name = "schedules")
 public class Schedule {
 
+    @Id
+    @Column(name = "schedule_id")
+    private Long scheduleId;
     private LocalDate date;
     @JsonProperty(value = "enter_tm")
     @Column(name = "enter_time")

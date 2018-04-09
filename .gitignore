@@ -31,5 +31,5 @@ $RECYCLE.BIN/
 ## Sensitive Stuff Bruh ##
 ##########################
 
-mysql.properties
+jpa.properties
 mailer.properties

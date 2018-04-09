@@ -6,9 +6,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.DatatypeConverter;
 
@@ -48,6 +51,8 @@ public class Event {
     @Column(name = "open_date")
     private LocalDateTime openDate;
 
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_key")
     private List<Schedule> schedules;
 
     @Column(name = "schedule_change")
