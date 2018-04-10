@@ -34,9 +34,9 @@
   </developers>
 
   <properties>
-    <spring.version>5.0.3.RELEASE</spring.version>
-    <spring.boot.version>1.5.10.RELEASE</spring.boot.version>
-    <spring.batch.version>4.0.0.RELEASE</spring.batch.version>
+    <spring.boot.version>2.0.1.RELEASE</spring.boot.version>
+    <spring.batch.version>4.0.1.RELEASE</spring.batch.version>
+    <ms.jackson.version>2.9.4</ms.jackson.version>
     <logback.version>1.2.3</logback.version>
   </properties>
 
@@ -64,7 +64,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>2.0.1.RELEASE</version>
+      <version>${spring.boot.version}</version>
     </dependency>
 
 
@@ -92,7 +92,7 @@
     <dependency>
       <groupId>org.simplejavamail</groupId>
       <artifactId>simple-java-mail</artifactId>
-      <version>5.0.1</version>
+      <version>5.0.2</version>
     </dependency>
     <dependency>
       <groupId>net.markenwerk</groupId>
@@ -104,19 +104,19 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.9.4</version>
+      <version>${ms.jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.9.4</version>
+      <version>${ms.jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.4</version>
+      <version>${ms.jackson.version}</version>
     </dependency>
 
     <!-- Apache -->
