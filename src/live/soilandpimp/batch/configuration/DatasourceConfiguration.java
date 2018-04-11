@@ -19,13 +19,13 @@ import live.soilandpimp.batch.util.AppConstants;
 @Configuration
 @DevelopmentProfile
 @ProductionProfile
-@PropertySource(value = {"classpath:resources/mysql.properties"})
+@PropertySource(value = {"classpath:resources/jpa.properties"})
 public class DatasourceConfiguration {
 
     @Autowired
     private Environment springEnvironment;
 
-    @Bean
+    @Bean(destroyMethod = "")
     @SoilAndPimpDataSource
     public DataSource dataSource() {
 

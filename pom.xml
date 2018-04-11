@@ -177,7 +177,7 @@
     <resources>
       <resource>
         <targetPath>resource</targetPath>
-        <directory>src/resource</directory>
+        <directory>src/resources</directory>
         <filtering>true</filtering>
       </resource>
     </resources>

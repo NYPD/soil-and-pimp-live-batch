@@ -2,9 +2,12 @@ package live.soilandpimp.batch.configuration;
 
 import java.util.Arrays;
 
+import javax.sql.DataSource;
+
 import org.simplejavamail.mailer.Mailer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -42,8 +45,8 @@ import live.soilandpimp.batch.writer.EventWriter;
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
 @Import(value = {JpaConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
-@PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true )
-public class BatchConfiguration {
+@PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true)
+public class BatchConfiguration extends DefaultBatchConfigurer {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -62,20 +65,20 @@ public class BatchConfiguration {
 
     @Bean
     public Job addAndEmailEventsJob() {
-        return this.jobBuilderFactory.get("addAndEmailEvents")
-                                     .start(addNewEvents())
-                                     .next(emailNewEvents())
-                                     .build();
+        return jobBuilderFactory.get("addAndEmailEvents")
+                                .start(addNewEvents())
+                                .next(emailNewEvents())
+                                .build();
     }
 
     @Bean
     public Step addNewEvents() {
-        return this.stepBuilderFactory.get("addNewEvents")
-                                      .<Event, Event>chunk(1)
-                                      .reader(new SiteEventReader(jvcMusicJsonDao))
-                                      .processor(new NewEventProccessor(eventRepository))
-                                      .writer(new EventWriter(eventRepository))
-                                      .build();
+        return stepBuilderFactory.get("addNewEvents")
+                                 .<Event, Event>chunk(1)
+                                 .reader(new SiteEventReader(jvcMusicJsonDao))
+                                 .processor(new NewEventProccessor(eventRepository))
+                                 .writer(new EventWriter(eventRepository))
+                                 .build();
     }
 
     @Bean
@@ -83,17 +86,17 @@ public class BatchConfiguration {
 
         String[] activeProfiles = springEnvironment.getActiveProfiles();
         boolean isDevelopment = Arrays.stream(activeProfiles).filter(x -> AppConstants.DEV_PROFILE.equals(x))
-                .findAny().orElse(null) != null;
+                                      .findAny().orElse(null) != null;
 
         String webappUrl = isDevelopment? springEnvironment.getProperty("mailer.dev.webapp.domain")
                 : springEnvironment.getProperty("mailer.prod.webapp.domain");
 
-        return this.stepBuilderFactory.get("emailNewEvents")
-                                      .<Event, Event>chunk(10)
-                                      .reader(new NewEventReader(eventRepository))
-                                      .processor(new EmailProcessor(emailRepository, mailer, webappUrl))
-                                      .writer(new EventWriter(eventRepository))
-                                      .build();
+        return stepBuilderFactory.get("emailNewEvents")
+                                 .<Event, Event>chunk(10)
+                                 .reader(new NewEventReader(eventRepository))
+                                 .processor(new EmailProcessor(emailRepository, mailer, webappUrl))
+                                 .writer(new EventWriter(eventRepository))
+                                 .build();
     }
 
     @Bean
@@ -112,6 +115,12 @@ public class BatchConfiguration {
     @ProductionProfile
     public EventContentProvidor eventContentProvidor() {
         return new EventContentProvidor();
+    }
+
+    @Override
+    public void setDataSource(DataSource dataSource) {
+        // override to do not set datasource even if a datasource exist.
+        // initialize will use a Map based JobRepository (instead of database)
     }
 
 }
