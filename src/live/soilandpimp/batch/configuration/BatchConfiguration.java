@@ -2,12 +2,9 @@ package live.soilandpimp.batch.configuration;
 
 import java.util.Arrays;
 
-import javax.sql.DataSource;
-
 import org.simplejavamail.mailer.Mailer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -46,7 +43,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
 @Import(value = {JpaConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
 @PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true)
-public class BatchConfiguration extends DefaultBatchConfigurer {
+public class BatchConfiguration {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -115,12 +112,6 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     @ProductionProfile
     public EventContentProvidor eventContentProvidor() {
         return new EventContentProvidor();
-    }
-
-    @Override
-    public void setDataSource(DataSource dataSource) {
-        // override to do not set datasource even if a datasource exist.
-        // initialize will use a Map based JobRepository (instead of database)
     }
 
 }
