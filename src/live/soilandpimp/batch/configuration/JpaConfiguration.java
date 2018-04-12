@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -41,11 +43,17 @@ public class JpaConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setDatabase(Database.MYSQL);
+        vendorAdapter.setShowSql(true);
+
         String domainPackage = Domain.class.getPackage().getName();
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setPackagesToScan(domainPackage);
         factory.setDataSource(dataSource);
+        factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         factory.setJpaProperties(hibernateProps());
         return factory;
@@ -54,19 +62,17 @@ public class JpaConfiguration {
     @Bean
     public PlatformTransactionManager transactionManager() {
 
-        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
-        dataSourceTransactionManager.setDataSource(dataSource);
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setDataSource(dataSource);
 
-        return dataSourceTransactionManager;
+        return jpaTransactionManager;
     }
 
     private Properties hibernateProps() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
         properties.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
-        properties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
-
 
 }

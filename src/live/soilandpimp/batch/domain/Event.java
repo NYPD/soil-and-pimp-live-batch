@@ -52,7 +52,7 @@ public class Event {
     private LocalDateTime openDate;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_key")
+    @JoinColumn(name = "event_key", nullable = false)
     private List<Schedule> schedules;
 
     @Column(name = "schedule_change")

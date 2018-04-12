@@ -26,6 +26,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id", unique = true)
     private Long scheduleId;
+    @Column(name = "`date`")
     private LocalDate date;
     @JsonProperty(value = "enter_tm")
     @Column(name = "enter_time")
@@ -36,6 +37,7 @@ public class Schedule {
     @JsonProperty(value = "prefecture_nm")
     private String prefecture;
     private String place;
+    @Column(name = "`call`")
     private String call;
     private String memo;
     @JsonProperty(value = "link_url")
