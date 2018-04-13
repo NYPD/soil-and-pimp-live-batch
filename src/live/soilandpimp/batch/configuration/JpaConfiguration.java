@@ -1,7 +1,5 @@
 package live.soilandpimp.batch.configuration;
 
-import java.util.Properties;
-
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -36,10 +33,6 @@ public class JpaConfiguration {
     @SoilAndPimpDataSource
     private DataSource dataSource;
 
-    @Autowired
-    private Environment environment;
-
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
@@ -55,7 +48,6 @@ public class JpaConfiguration {
         factory.setDataSource(dataSource);
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        factory.setJpaProperties(hibernateProps());
         return factory;
     }
 
@@ -66,13 +58,6 @@ public class JpaConfiguration {
         jpaTransactionManager.setDataSource(dataSource);
 
         return jpaTransactionManager;
-    }
-
-    private Properties hibernateProps() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
-        properties.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
-        return properties;
     }
 
 }

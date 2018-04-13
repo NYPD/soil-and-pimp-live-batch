@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -51,7 +52,7 @@ public class Event {
     @Column(name = "open_date")
     private LocalDateTime openDate;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "event_key", nullable = false)
     private List<Schedule> schedules;
 
@@ -156,7 +157,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event [eventKey=" + eventKey + ", name=" + name + ", schedules=" + schedules + "]";
+        return "Event [eventKey=" + eventKey + ", name=" + name + "]";
     }
 
 }

@@ -89,6 +89,7 @@ public class Schedule {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((call == null)? 0 : call.hashCode());
         result = prime * result + ((date == null)? 0 : date.hashCode());
         result = prime * result + ((enterTime == null)? 0 : enterTime.hashCode());
         result = prime * result + ((link == null)? 0 : link.hashCode());
@@ -100,8 +101,42 @@ public class Schedule {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Schedule other = (Schedule) obj;
+        if (call == null) {
+            if (other.call != null) return false;
+        } else if (!call.equals(other.call)) return false;
+        if (date == null) {
+            if (other.date != null) return false;
+        } else if (!date.equals(other.date)) return false;
+        if (enterTime == null) {
+            if (other.enterTime != null) return false;
+        } else if (!enterTime.equals(other.enterTime)) return false;
+        if (link == null) {
+            if (other.link != null) return false;
+        } else if (!link.equals(other.link)) return false;
+        if (memo == null) {
+            if (other.memo != null) return false;
+        } else if (!memo.equals(other.memo)) return false;
+        if (place == null) {
+            if (other.place != null) return false;
+        } else if (!place.equals(other.place)) return false;
+        if (prefecture == null) {
+            if (other.prefecture != null) return false;
+        } else if (!prefecture.equals(other.prefecture)) return false;
+        if (startTime == null) {
+            if (other.startTime != null) return false;
+        } else if (!startTime.equals(other.startTime)) return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
-        return "Schedule [startTime=" + startTime + ", prefecture=" + prefecture + ", place=" + place + "]";
+        return "Schedule [scheduleId=" + scheduleId + ", date=" + date + ", startTime=" + startTime + ", place=" + place
+               + "]";
     }
 
 }
