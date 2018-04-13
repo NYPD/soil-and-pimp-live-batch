@@ -1,18 +1,14 @@
 package live.soilandpimp.batch.configuration;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import org.simplejavamail.mailer.Mailer;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersIncrementer;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,7 +44,7 @@ import live.soilandpimp.batch.writer.EventWriter;
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
 @Import(value = {JpaConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
 @PropertySource(value = {"classpath:resources/mailer.properties"}, ignoreResourceNotFound = true)
-public class BatchConfiguration extends DefaultBatchConfigurer {
+public class BatchConfiguration {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -69,9 +65,9 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     public Job addAndEmailEventsJob() {
 
         return jobBuilderFactory.get("addAndEmailEvents")
+                                .incrementer(new RunIdIncrementer())
                                 .start(addNewEvents())
                                 .next(emailNewEvents())
-                                .incrementer(new ParameterIncementer())
                                 .build();
     }
 
@@ -121,11 +117,4 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
         return new EventContentProvidor();
     }
 
-    public static class ParameterIncementer implements JobParametersIncrementer {
-
-        @Override
-        public JobParameters getNext(JobParameters parameters) {
-            return new JobParametersBuilder().addDate("run.id", new Date(), true).toJobParameters();
-        }
-    }
 }
