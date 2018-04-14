@@ -14,7 +14,7 @@ import live.soilandpimp.batch.annotation.TestProfile;
 
 @Configuration
 @TestProfile
-public class EmbeddedDateSourceConfiguration {
+public class EmbeddedDataSourceConfiguration {
 
     @Bean
     @SoilAndPimpDataSource

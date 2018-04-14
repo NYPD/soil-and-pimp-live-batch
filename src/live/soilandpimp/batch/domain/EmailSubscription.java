@@ -13,7 +13,7 @@ public class EmailSubscription {
     @Column(name = "email_address")
     private String emailAddress;
 
-    // Cassandra constructor
+    // JPA constructor
     protected EmailSubscription() {};
 
     // Default Accessors *********************************************

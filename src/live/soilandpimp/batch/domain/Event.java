@@ -60,7 +60,7 @@ public class Event {
     private boolean scheduleChange;
     private boolean broadcast;
 
-    // Cassandra constructor
+    // JPA constructor
     protected Event() {};
 
     /**

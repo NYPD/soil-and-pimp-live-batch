@@ -19,7 +19,7 @@ import live.soilandpimp.batch.util.AppConstants;
 @Configuration
 @DevelopmentProfile
 @ProductionProfile
-@PropertySource(value = {"classpath:resources/jpa.properties"})
+@PropertySource(value = {"classpath:resources/mysql.properties"})
 public class DatasourceConfiguration {
 
     @Autowired
