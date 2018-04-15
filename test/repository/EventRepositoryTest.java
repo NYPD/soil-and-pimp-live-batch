@@ -3,18 +3,16 @@ package repository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import configuration.EmbeddedDataSourceConfiguration;
@@ -29,6 +27,9 @@ import live.soilandpimp.batch.util.AppConstants;
 @ContextConfiguration(classes = {BatchConfiguration.class,
                                  EmbeddedDataSourceConfiguration.class,
                                  JvcJsonWebEventDaoConfiguration.class})
+@Sql(scripts = "/setup/create-soil-and-pimp-schema.sql")
+@Sql(scripts = "/setup/repository/insert-event-repository-test-info.sql")
+@Sql(scripts = "/setup/drop-soil-and-pimp-schema.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
 public class EventRepositoryTest {
 
     @Autowired
@@ -36,7 +37,6 @@ public class EventRepositoryTest {
 
     @Test
     public void shoulFindByBroadcastIsFalse() {
-
 
         Iterable<Event> findAll = eventRepository.findAll();
         assertThat(((Collection<?>) findAll).size(), is(2));
@@ -46,17 +46,4 @@ public class EventRepositoryTest {
 
     }
 
-    @AfterClass
-    public static void stopCassandraEmbedded() throws IOException {
-
-        File directory = new File("target/embeddedCassandra");
-
-        try {
-            Thread.sleep(2000);
-            FileUtils.deleteDirectory(directory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 }

@@ -1,1 +1,1 @@
-DROP SCHEMA moe_sounds CASCADE
+DROP SCHEMA soil_and_pimp_live CASCADE
