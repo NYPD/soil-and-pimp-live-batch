@@ -22,10 +22,10 @@ import live.soilandpimp.batch.repositories.EmailRepository;
 import live.soilandpimp.batch.util.AppConstants;
 
 @RunWith(SpringRunner.class)
-@ActiveProfiles({AppConstants.TEST_PROFILE})
 @ContextConfiguration(classes = {BatchConfiguration.class,
                                  EmbeddedDataSourceConfiguration.class,
                                  JvcJsonWebEventDaoConfiguration.class})
+@ActiveProfiles({AppConstants.TEST_PROFILE})
 @Sql(scripts = "/setup/create-soil-and-pimp-schema.sql")
 @Sql(scripts = "/setup/repository/insert-email-repository-test-info.sql")
 @Sql(scripts = "/setup/drop-soil-and-pimp-schema.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)

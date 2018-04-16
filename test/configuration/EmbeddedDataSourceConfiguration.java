@@ -18,7 +18,7 @@ public class EmbeddedDataSourceConfiguration {
 
     @Bean
     @SoilAndPimpDataSource
-    public DataSource getMoeSoundsDataSource() throws NamingException {
+    public DataSource embeddedDatasource() throws NamingException {
 
         EmbeddedDatabase datasource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
 

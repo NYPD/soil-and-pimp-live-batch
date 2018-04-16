@@ -2,6 +2,7 @@ package live.soilandpimp.batch.configuration;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -50,9 +51,10 @@ public class JpaConfiguration {
         //                                      .orElse(null) != null;
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
+        //vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabase(isTest? Database.HSQL : Database.MYSQL);
         vendorAdapter.setShowSql(isProduction? false : true);
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect." + (isTest? "HSQLDialect" : "MySQL57InnoDBDialect"));
 
         String domainPackage = Domain.class.getPackage().getName();
 
@@ -61,6 +63,7 @@ public class JpaConfiguration {
         factory.setDataSource(dataSource);
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        factory.setJpaProperties(jpaProperties());
         return factory;
     }
 
@@ -71,6 +74,14 @@ public class JpaConfiguration {
         jpaTransactionManager.setDataSource(dataSource);
 
         return jpaTransactionManager;
+    }
+
+    private Properties jpaProperties() {
+
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.default_schema", "soil_and_pimp_live");
+
+        return properties;
     }
 
 }

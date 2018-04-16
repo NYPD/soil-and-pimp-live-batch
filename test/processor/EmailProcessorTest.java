@@ -9,14 +9,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -84,17 +80,4 @@ public class EmailProcessorTest {
 
     }
 
-    @AfterClass
-    public static void stopCassandraEmbedded() throws IOException {
-
-        File directory = new File("target/embeddedCassandra");
-
-        try {
-            Thread.sleep(2000);
-            FileUtils.deleteDirectory(directory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 }
