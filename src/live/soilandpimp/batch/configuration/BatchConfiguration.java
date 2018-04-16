@@ -21,7 +21,7 @@ import live.soilandpimp.batch.util.EventContentProvidor;
 @Configuration
 @EnableBatchProcessing
 @ComponentScan(basePackageClasses = {DAO.class, Service.class})
-@Import(value = {JpaConfiguration.class, JobConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
+@Import(value = {JobConfiguration.class, JpaConfiguration.class, MailerConfiguration.class, LogbackConfiguration.class})
 public class BatchConfiguration {
 
     @Bean
