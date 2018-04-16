@@ -7,6 +7,7 @@ import org.springframework.batch.item.ItemProcessor;
 
 import live.soilandpimp.batch.domain.Event;
 import live.soilandpimp.batch.repositories.EventRepository;
+import live.soilandpimp.batch.util.UtilityBelt;
 
 /**
  * Processor checking to see if the {@link Event} passed in already exists in cassandra or not. <br>
@@ -29,7 +30,7 @@ public class NewEventProccessor implements ItemProcessor<Event, Event> {
 
         Event pastEvent = pastEventsByKey.get(event.getEventKey());
         boolean isNewEvent = pastEvent == null;
-        boolean newSchedules = !isNewEvent && event.getSchedules().hashCode() != pastEvent.getSchedules().hashCode();
+        boolean newSchedules = !isNewEvent && !UtilityBelt.compareListContents(event.getSchedules(), pastEvent.getSchedules());
 
         if (newSchedules) event.markAsScheduledChange();
 
