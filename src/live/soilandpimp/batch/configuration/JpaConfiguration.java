@@ -41,17 +41,11 @@ public class JpaConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
-        List<String> profiles = Arrays.asList(springEnvironment.getActiveProfiles());
-        boolean isProduction = profiles.contains(AppConstants.PRODUCTION_PROFILE);
-        boolean isTest = profiles.contains(AppConstants.TEST_PROFILE);
-
-        //        boolean isDevelopment = Arrays.stream(activeProfiles)
-        //                                      .filter(x -> AppConstants.DEV_PROFILE.equals(x))
-        //                                      .findAny()
-        //                                      .orElse(null) != null;
+        List<String> activeProfiles = Arrays.asList(springEnvironment.getActiveProfiles());
+        boolean isProduction = activeProfiles.contains(AppConstants.PRODUCTION_PROFILE);
+        boolean isTest = activeProfiles.contains(AppConstants.TEST_PROFILE);
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        //vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabase(isTest? Database.HSQL : Database.MYSQL);
         vendorAdapter.setShowSql(isProduction? false : true);
         vendorAdapter.setDatabasePlatform("org.hibernate.dialect." + (isTest? "HSQLDialect" : "MySQL57InnoDBDialect"));

@@ -1,6 +1,7 @@
 package live.soilandpimp.batch.configuration;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.simplejavamail.mailer.Mailer;
 import org.springframework.batch.core.Job;
@@ -71,9 +72,8 @@ public class JobConfiguration {
     @Bean
     public Step emailNewEvents() {
 
-        String[] activeProfiles = springEnvironment.getActiveProfiles();
-        boolean isDevelopment = Arrays.stream(activeProfiles).filter(x -> AppConstants.DEV_PROFILE.equals(x))
-                                      .findAny().orElse(null) != null;
+        List<String> activeProfiles = Arrays.asList(springEnvironment.getActiveProfiles());
+        boolean isDevelopment = activeProfiles.contains(AppConstants.DEV_PROFILE);
 
         String webappUrl = isDevelopment? springEnvironment.getProperty("mailer.dev.webapp.domain")
                 : springEnvironment.getProperty("mailer.prod.webapp.domain");
