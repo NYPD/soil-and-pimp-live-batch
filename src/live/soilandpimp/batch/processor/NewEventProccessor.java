@@ -3,6 +3,7 @@ package live.soilandpimp.batch.processor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.ItemProcessor;
 
 import live.soilandpimp.batch.domain.Event;
@@ -30,11 +31,12 @@ public class NewEventProccessor implements ItemProcessor<Event, Event> {
 
         Event pastEvent = pastEventsByKey.get(event.getEventKey());
         boolean isNewEvent = pastEvent == null;
+        boolean newMemo = !isNewEvent && !StringUtils.equalsIgnoreCase(event.getMemo(), pastEvent.getMemo());
         boolean newSchedules = !isNewEvent && !UtilityBelt.compareListContents(event.getSchedules(), pastEvent.getSchedules());
 
         if (newSchedules) event.markAsScheduledChange();
 
-        return (isNewEvent || newSchedules)? event : null;
+        return (isNewEvent || newMemo || newSchedules)? event : null;
     }
 
 }
