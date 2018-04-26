@@ -48,7 +48,8 @@ public class JpaConfiguration {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(isTest? Database.HSQL : Database.MYSQL);
         vendorAdapter.setShowSql(isProduction? false : true);
-        vendorAdapter.setDatabasePlatform("org.hibernate.dialect." + (isTest? "HSQLDialect" : "MySQL57InnoDBDialect"));
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect." + (isTest? "HSQLDialect" : "MySQL57Dialect"));
+        vendorAdapter.setGenerateDdl(false);
 
         String domainPackage = Domain.class.getPackage().getName();
 
