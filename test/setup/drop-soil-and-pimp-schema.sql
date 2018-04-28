@@ -1,0 +1,1 @@
+DROP SCHEMA soil_and_pimp_live CASCADE
