@@ -5,7 +5,7 @@
   <groupId>live.soilandpimp</groupId>
   <artifactId>soil-and-pimp-live-batch</artifactId>
   <name>Soil and Pimp Live Batch</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <packaging>jar</packaging>
   <inceptionYear>2018</inceptionYear>
 
