@@ -39,11 +39,13 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
                                                                .from("events@soilandpimp.live")
                                                                .withSubject(subject);
 
-        populatingBuilder.withHTMLText(buildHtmlEventMarkup(newEvent));
+        String eventMarkup = buildHtmlEventMarkup(newEvent);
 
         for (EmailSubscription emailSubscription : emailSubscriptions) {
 
-            populatingBuilder.appendTextHTML(buildUnsubscribeEmailLink(emailSubscription));
+            String unsubscribeEmailLink = buildUnsubscribeEmailLink(emailSubscription);
+
+            populatingBuilder.withHTMLText(eventMarkup + unsubscribeEmailLink);
             
             Email email = EmailBuilder.copying(populatingBuilder)
                                       .to(emailSubscription.getEmailAddress())
