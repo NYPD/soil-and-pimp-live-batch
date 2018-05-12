@@ -14,7 +14,7 @@ public class JvcSiteUnavailible extends Exception {
 
     public JvcSiteUnavailible(int responsecode) {
         super();
-        this.webResponseCode = responsecode;
+        webResponseCode = responsecode;
     }
 
     public int getWebResponseCode() {
