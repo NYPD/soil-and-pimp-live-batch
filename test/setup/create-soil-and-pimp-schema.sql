@@ -30,5 +30,8 @@ CREATE TABLE soil_and_pimp_live.schedules (
 
 CREATE TABLE soil_and_pimp_live.email_subscriptions (
   email_address varchar(100),
+  verification_token varchar(45) NULL,
+  verified BOOLEAN NOT NULL,
+  created_date DATE NOT NULL,
   PRIMARY KEY (email_address)
 );

@@ -58,7 +58,7 @@ public class EmailProcessorTest {
         when(mockEvent.isScheduleChange()).thenReturn(true);
 
         EmailRepository emailRepository = mock(EmailRepository.class);
-        when(emailRepository.findAll()).thenReturn(new ArrayList<EmailSubscription>(
+        when(emailRepository.findByVerifiedTrue()).thenReturn(new ArrayList<EmailSubscription>(
                 Arrays.asList(mockEmailSubscription, mockEmailSubscription)));
 
         EmailProcessor emailProcessor = new EmailProcessor(emailRepository, mailer, "localhost:8080");
