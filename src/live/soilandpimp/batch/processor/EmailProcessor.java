@@ -21,7 +21,7 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
     private String webappUrl;
 
     public EmailProcessor(EmailRepository emailRepository, Mailer mailer, String webappUrl) {
-        emailRepository.findAll().forEach(emailSubscriptions::add);
+        emailRepository.findByVerifiedTrue().forEach(emailSubscriptions::add);
         this.mailer = mailer;
         this.webappUrl = webappUrl;
     }

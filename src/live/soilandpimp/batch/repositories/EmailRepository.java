@@ -1,5 +1,7 @@
 package live.soilandpimp.batch.repositories;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import live.soilandpimp.batch.domain.EmailSubscription;
@@ -12,4 +14,5 @@ import live.soilandpimp.batch.domain.EmailSubscription;
  */
 public interface EmailRepository extends CrudRepository<EmailSubscription, String> {
 
+    public List<EmailSubscription> findByVerifiedTrue();
 }
