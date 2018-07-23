@@ -20,7 +20,7 @@ import live.soilandpimp.batch.exception.JvcSiteUnavailible;
 public class EventContentProvidor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventContentProvidor.class);
-    private static final String JVC_MUSIC_SOIL_INFORMATION_URL = "http://www.jvcmusic.co.jp/-/Information/A018653.json";
+    private static final String JVC_MUSIC_SOIL_INFORMATION_URL = "https://www.jvcmusic.co.jp/-/Information/A018653.json";
 
     public byte[] getContent() {
 
