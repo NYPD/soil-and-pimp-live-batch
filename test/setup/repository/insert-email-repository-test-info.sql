@@ -1,2 +1,2 @@
-INSERT INTO soil_and_pimp_live.email_subscriptions (email_address)
-     VALUES ('a@a.com'), ('b@b.com'), ('c@c.com');
+INSERT INTO soil_and_pimp_live.email_subscriptions (email_address, verified, created_date)
+     VALUES ('a@a.com', false, CURRENT_DATE), ('b@b.com', true, CURRENT_DATE), ('c@c.com', true, CURRENT_DATE);

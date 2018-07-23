@@ -21,7 +21,7 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
     private String webappUrl;
 
     public EmailProcessor(EmailRepository emailRepository, Mailer mailer, String webappUrl) {
-        emailRepository.findAll().forEach(emailSubscriptions::add);
+        emailRepository.findByVerifiedTrue().forEach(emailSubscriptions::add);
         this.mailer = mailer;
         this.webappUrl = webappUrl;
     }
@@ -62,6 +62,12 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
         StringBuffer stringBuffer = new StringBuffer();
 
+        stringBuffer.append("<!DOCTYPE html>");
+        stringBuffer.append("<html>");
+        stringBuffer.append("<head>");
+        stringBuffer.append("<meta charset=\"utf-8\">");
+        stringBuffer.append("</head>");
+        stringBuffer.append("<body>");
         stringBuffer.append("<h1>" + event.getName() + "</h1>");
         stringBuffer.append("<hr>");
 
@@ -107,6 +113,9 @@ public class EmailProcessor implements ItemProcessor<Event, Event> {
 
             stringBuffer.append("</ul>");
         }
+
+        stringBuffer.append("</body>");
+        stringBuffer.append("</html>");
 
         return stringBuffer.toString();
 

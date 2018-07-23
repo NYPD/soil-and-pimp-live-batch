@@ -35,10 +35,18 @@ public class EmailRepositoryTest {
     private EmailRepository emailRepository;
 
     @Test
-    public void shoulFindAllEmailSubscriptions() {
+    public void shouldFindAllEmailSubscriptions() {
 
         Iterable<EmailSubscription> findAll = emailRepository.findAll();
         assertThat(((Collection<?>) findAll).size(), is(3));
+
+    }
+
+    @Test
+    public void shouldFindAllVerifiedEmailSubscriptions() {
+
+        Iterable<EmailSubscription> allVerifiiedEmails = emailRepository.findByVerifiedTrue();
+        assertThat(((Collection<?>) allVerifiiedEmails).size(), is(2));
 
     }
 
