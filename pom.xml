@@ -5,7 +5,7 @@
   <groupId>live.soilandpimp</groupId>
   <artifactId>soil-and-pimp-live-batch</artifactId>
   <name>Soil and Pimp Live Batch</name>
-  <version>0.1.3</version>
+  <version>0.1.4</version>
   <packaging>jar</packaging>
   <inceptionYear>2018</inceptionYear>
 
@@ -35,7 +35,7 @@
 
   <properties>
     <spring.boot.version>2.0.1.RELEASE</spring.boot.version>
-    <spring.batch.version>4.0.1.RELEASE</spring.batch.version>
+    <spring.batch.version>4.0.2.RELEASE</spring.batch.version>
     <ms.jackson.version>2.9.8</ms.jackson.version>
     <logback.version>1.2.3</logback.version>
   </properties>
