@@ -36,7 +36,7 @@
   <properties>
     <spring.boot.version>2.0.1.RELEASE</spring.boot.version>
     <spring.batch.version>4.0.2.RELEASE</spring.batch.version>
-    <ms.jackson.version>2.10.1</ms.jackson.version>
+    <ms.jackson.version>2.13.4.1</ms.jackson.version>
     <logback.version>1.2.3</logback.version>
   </properties>
 
